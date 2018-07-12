@@ -1,0 +1,33 @@
+{% extends template.self %}
+
+{% block javascript %}
+{{ super() }}
+
+<script>
+    gitbook.events.bind('start', function (e, config) {
+        const menu = [{
+            'name': 'English',
+            'code': 'en'
+        }].map(language => {
+            return {
+                text: language.name,
+                onClick: function (e) {
+                    e.preventDefault();
+                    let folders = location.pathname.split('/');
+                    folders[1] = language.code;
+                    const path = folders.join('/');
+                    location.href = `${location.protocol}//${location.host}${path}`;
+                }
+            }
+        });
+
+        gitbook.toolbar.createButton({
+            icon: 'fa fa-flag',
+            label: 'Language',
+            position: 'right',
+            dropdown: menu,
+            index: 0
+        });
+    })
+</script>
+{% endblock %}
